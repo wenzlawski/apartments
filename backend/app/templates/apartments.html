@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Apartments{% endblock %}
+{% block content %}
+    <h1 class="text-xl">Apartments</h1>
+    <div id="apt-list"
+         hx-get="/apartments/list"
+         hx-swap="innerHTML"
+         hx-trigger="refreshAptList from:body">{% include "partials/apartments_list.html" %}</div>
+    <h1 class="text-xl">Add new</h1>
+    <form hx-post="/apartments/"
+        hx-target="#apartments-list"
+        hx-swap="beforeend"
+        class="pure-form"
+        hx-on::after-request="if(event.detail.successful) this.reset(); this.querySelector('input[name=title]').focus()"">
+        <div class="fieldset">
+            <label class="fieldset-legend" for="multi-first-name">Title</label>
+            <input type="text" class="input" name="title">
+        </div>
+        <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+{% endblock %}

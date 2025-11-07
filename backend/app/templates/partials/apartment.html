@@ -1,0 +1,7 @@
+<li class="list-row">
+    <a href="/apartments/{{ item.id }}">{{ item.title }}</a>
+    <button hx-delete="/apartments/{{ item.id }}"
+            hx-target="closest li"
+            hx-swap="delete"
+            class="btn btn-ghost">Delete</button>
+</li>

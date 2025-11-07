@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Apartment {{ item.title }}{% endblock %}
+{% block content %}
+    <form hx-patch
+          hx-swap="none"
+          x-data="{ submitted: false, rating: {{ item.rating|default(0, true) }} }"
+          @submit.prevent="if (submitted) return false; submitted = true; setTimeout(() => submitted = false, 500)">
+        <div class="fieldset">
+            <label for="title" class="fieldset-legend">Title</label>
+            <input type="text" class="input" name="title" value="{{ item.title }}">
+        </div>
+        <div class="fieldset">
+            <label for="description" class="fieldset-legend">Description</label>
+            <textarea rows="4" type="text" name="description" class="textarea">{{ item.description }}</textarea>
+        </div>
+        <div class="fieldset text-4xl flex items-center space-x-1">
+            <template x-for="star in 5" :key="star">
+                <button type="button"
+                        @click="rating = star"
+                        class="focus:outline-none"
+                        :aria-label="`Rate ${star} out of 5`"
+                        :class="rating >= star ? 'text-yellow-400' : 'text-gray-400' ">★</button>
+            </template>
+            <input type="hidden" name="rating" :value="rating">
+        </div>
+        <div>
+            <input type="submit"
+                   :value="submitted ? 'Saved!' : 'Save'"
+                   value="Save"
+                   :disabled="submitted"
+                   class="btn-primary btn">
+        </div>
+    </form>
+    <button hx-delete="/apartments/{{ item.id }}" class="btn btn-ghost">Delete</button>
+{% endblock %}

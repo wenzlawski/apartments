@@ -1,0 +1,7 @@
+services:
+  db:
+    environment:
+      POSTGRES_PASSWORD: apartments
+    volumes:
+      # Only in dev: initialize schema/data on first run
+      - .docker-compose/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d

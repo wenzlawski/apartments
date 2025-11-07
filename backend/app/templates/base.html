@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            {% block title %}Default Title{% endblock %}
+        </title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@5"
+              rel="stylesheet"
+              type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <!-- <link href="{{ url_for('static', path='/styles/output.css') }}"
+       rel="stylesheet"> -->
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+						 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/base-min.css"> -->
+        {% block head %}{% endblock %}
+    </head>
+    <body class="min-h-screen">
+        {% include "partials/nav.html" %}
+        <div class="max-w-3xl mx-auto">
+            {% block content %}{% endblock %}
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
+    </body>
+</html>

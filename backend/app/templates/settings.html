@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Apartments{% endblock %}
+{% block content %}
+    <h1>Settings</h1>
+    <form hx-patch
+          hx-swap="none"
+          x-data="{ submitted: false }"
+          @submit.prevent="if (submitted) return false; submitted = true; setTimeout(() => submitted = false, 500)">
+        <div class="fieldset">
+            <label for="email" class="fieldset-legend">Email</label>
+            <input type="email" name="email" class="input" value="{{ item.email }}">
+        </div>
+        <div class="fieldset">
+            <label class="fieldset-legend" for="cron_schedule">Cron schedule</label>
+            <input type="text"
+                   class="input"
+                   name="cron_schedule"
+                   value="{{ item.cron_schedule }}">
+        </div>
+        <div>
+            <input type="submit"
+                   :value="submitted ? 'Saved!' : 'Save'"
+                   value="Save"
+                   :disabled="submitted"
+                   class="btn btn-primary">
+        </div>
+    </form>
+{% endblock %}
