@@ -1,24 +1,34 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vitest/config';
-import { playwright } from '@vitest/browser-playwright';
-import tailwindcss from '@tailwindcss/vite';
+
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
+import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 	test: {
-		expect: { requireAssertions: true },
+		testTimeout: 2500,
+		hookTimeout: 2500,
+		expect: {
+			requireAssertions: true,
+			poll: {
+				timeout: 500
+			}
+		},
 		projects: [
 			{
 				extends: './vite.config.ts',
 				test: {
 					name: 'client',
+					isolate: false,
 					browser: {
 						enabled: true,
 						provider: playwright(),
 						instances: [{ browser: 'chromium', headless: true }]
 					},
-					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-					exclude: ['src/lib/server/**']
+					include: ['tests/**/*.svelte.{test,spec}.{js,ts}']
+					// exclude: ['tests/lib/server/**']
 				}
 			},
 			{
@@ -26,8 +36,8 @@ export default defineConfig({
 				test: {
 					name: 'server',
 					environment: 'node',
-					include: ['src/**/*.{test,spec}.{js,ts}'],
-					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+					include: ['tests/**/*.{test,spec}.{js,ts}'],
+					exclude: ['tests/**/*.svelte.{test,spec}.{js,ts}']
 				}
 			}
 		]

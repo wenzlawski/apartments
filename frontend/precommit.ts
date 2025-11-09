@@ -1,5 +1,4 @@
 // import { $ } from "bun"
-
 import type { SpawnOptions } from 'bun';
 
 const spawnOptions: SpawnOptions.OptionsObject = {
