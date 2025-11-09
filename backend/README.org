@@ -1,0 +1,7 @@
+
+uv run uvicorn app.main:app --reload
+* Scraping
+
+Scraping is handled by the scrapy project [[file:app/scraper/]]. It is schedules through Celery via a redis broker to running scraper workers.
+
+The workers run indpendently and are just for executing tasks, so I am not sure yet what kind of access and code they need. My current understanding is they run external processes, so separating the scraper code would be smart, as it runs only on the workers. Though

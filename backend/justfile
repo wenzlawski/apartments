@@ -1,0 +1,2 @@
+dbup *ARGS:
+    podman compose up {{ARGS}}

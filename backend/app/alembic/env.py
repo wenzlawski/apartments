@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from logging.config import fileConfig
 
@@ -22,7 +22,7 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
 
-#from sqlmodel import SQLModel
+# from sqlmodel import SQLModel
 
 from app.models import SQLModel  # noqa
 from app.core.config import settings  # noqa

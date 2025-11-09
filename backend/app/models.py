@@ -1,6 +1,5 @@
 import uuid
 
-from fastapi import Form
 from sqlmodel import Field, SQLModel
 
 
@@ -13,28 +12,12 @@ class ApartmentBase(SQLModel):
 
 # Properties to receive on item creation
 class ApartmentCreate(ApartmentBase):
-    @classmethod
-    def as_form(
-        cls,
-        title: str = Form(..., min_length=1, max_length=255),
-        description: str | None = Form(None, max_length=255),
-        rating: int | None = Form(None),
-    ):
-        return cls(title=title, description=description, rating=rating)
+    pass
 
 
 # Properties to receive on item update
 class ApartmentUpdate(ApartmentBase):
     title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
-    @classmethod
-    def as_form(
-        cls,
-        title: str = Form(..., min_length=1, max_length=255),
-        description: str | None = Form(None, max_length=255),
-        rating: int | None = Form(None),
-    ):
-        return cls(title=title, description=description, rating=rating)
-
 
 
 # Database model, database table inferred from class name
@@ -51,9 +34,11 @@ class ApartmentsPublic(SQLModel):
     data: list[ApartmentPublic]
     count: int
 
+
 # Generic message
 class Message(SQLModel):
     message: str
+
 
 # Shared properties
 class SettingsBase(SQLModel):
@@ -63,13 +48,7 @@ class SettingsBase(SQLModel):
 
 # Properties to receive on item creation
 class SettingsCreate(SettingsBase):
-    @classmethod
-    def as_form(
-        cls,
-        email: str = Form(..., min_length=1, max_length=255),
-        cron_schedule: str | None = Form(None, max_length=255),
-    ):
-        return cls(email=email, cron_schedule=cron_schedule)
+    pass
 
 
 # Properties to receive on item update

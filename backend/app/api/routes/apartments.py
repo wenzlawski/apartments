@@ -1,10 +1,8 @@
 import uuid
 
-from fastapi import APIRouter, Depends, Request, Response, status
+from fastapi import APIRouter, Request, Response
 from fastapi.exceptions import HTTPException
-from fastapi.responses import HTMLResponse
-from sqlmodel import func, select
-from starlette.responses import JSONResponse, RedirectResponse
+from sqlmodel import select
 
 from app import crud
 from app.api.deps import SessionDep
@@ -16,14 +14,13 @@ from app.models import (
     ApartmentUpdate,
     Message,
 )
-from app.utils import templates
 
-router = APIRouter(prefix="/apartments")
+router = APIRouter(prefix="/apartments", tags=["apartments"])
+
 
 # Dummy datastore
 @router.get("/", response_model=ApartmentsPublic)
 def read_items(session: SessionDep, request: Request):
-
     statement = select(Apartment)
     items = session.exec(statement).all()
 
@@ -34,12 +31,15 @@ def read_items(session: SessionDep, request: Request):
 def get_apartment(request: Request, session: SessionDep, id: uuid.UUID):
     item = session.get(Apartment, id)
     if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="Apartment not found")
 
     return item
 
+
 @router.post("/", response_model=ApartmentPublic)
-def create_apartment(request: Request, session: SessionDep, apartment_in: ApartmentCreate):
+def create_apartment(
+    request: Request, session: SessionDep, apartment_in: ApartmentCreate
+):
     db_apartment = crud.create_apartment(session=session, apartment_in=apartment_in)
     return db_apartment
 
@@ -52,9 +52,9 @@ def update_apartment(
 ):
     apartment = session.get(Apartment, id)
     if not apartment:
-        raise HTTPException(status_code=404, detail="Item not found")
-    
-    update_data = apartment_in.dict(exclude_unset=True)
+        raise HTTPException(status_code=404, detail="Apartment not found")
+
+    update_data = apartment_in.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(apartment, key, value)
     session.add(apartment)
@@ -64,17 +64,15 @@ def update_apartment(
 
 
 @router.delete("/{id}")
-def delete_item(
-        session: SessionDep, response: Response, id: uuid.UUID
-) -> Message:
+def delete_item(session: SessionDep, response: Response, id: uuid.UUID) -> Message:
     """
     Delete an item.
     """
     apartment = session.get(Apartment, id)
     if not apartment:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="Apartment not found")
 
     session.delete(apartment)
     session.commit()
 
-    return Message(message="Apartment deleted successfully.")
+    return Message(message="Apartment deleted successfully")

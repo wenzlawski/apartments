@@ -1,7 +1,14 @@
+import logging
 from typing import Annotated, Any, Literal
 
-from pydantic import AnyUrl, BeforeValidator, PostgresDsn, computed_field
-from pydantic_settings import BaseSettings
+from pydantic import (
+    AnyUrl,
+    BeforeValidator,
+    PostgresDsn,
+    computed_field,
+    field_validator,
+)
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 def parse_cors(v: Any) -> list[str] | str:
@@ -11,15 +18,19 @@ def parse_cors(v: Any) -> list[str] | str:
         return v
     raise ValueError(v)
 
+
 class Settings(BaseSettings):
-    class Config:
-        env_file = '.env'
+    model_config = SettingsConfigDict(
+        env_file=".env", env_ignore_empty=True, extra="ignore"
+    )
 
     POSTGRES_HOST: str
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str = ""
     POSTGRES_DB: str = ""
+    API_V1_STR: str = "/api/v1"
+    ACTIVATE_SCHEDULER: bool = False
 
     PROJECT_NAME: str
 
@@ -47,5 +58,19 @@ class Settings(BaseSettings):
         return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGINS] + [
             self.FRONTEND_HOST
         ]
+
+    # You can still set this in your .env as a string (e.g. "DEBUG")
+    LOG_LEVEL: str = "INFO"
+
+    # Convert string level to logging constant
+    @field_validator("LOG_LEVEL", mode="after")
+    @classmethod
+    def convert_log_level(cls, v: str) -> int:
+        """Convert LOG_LEVEL string to a logging constant (e.g. logging.DEBUG)."""
+        level = getattr(logging, v.upper(), None)
+        if not isinstance(level, int):
+            raise ValueError(f"Invalid log level: {v}")
+        return level
+
 
 settings = Settings()

@@ -4,10 +4,8 @@ from sqlalchemy import Engine
 from sqlmodel import Session, select
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
 
-from app.core.config import settings
 from app.core.db import engine
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 max_tries = 60 * 5  # 5 minutes
@@ -25,6 +23,7 @@ def init(db_engine: Engine) -> None:
         with Session(db_engine) as session:
             # Try to create session to check if DB is awake
             session.exec(select(1))
+            logger.info("after session")
     except Exception as e:
         logger.error(e)
         raise e
@@ -32,7 +31,6 @@ def init(db_engine: Engine) -> None:
 
 def main() -> None:
     logger.info("Initializing service test")
-    logger.info(f"Database uri {settings.SQLALCHEMY_DATABASE_URI}")
     init(engine)
     logger.info("Service finished initializing")
 

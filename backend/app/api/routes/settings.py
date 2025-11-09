@@ -1,32 +1,22 @@
-import uuid
+from fastapi import APIRouter, Request
+from sqlmodel import select
 
-from fastapi import APIRouter, Depends, Request, Response
-from fastapi.exceptions import HTTPException
-from fastapi.responses import HTMLResponse
-from sqlmodel import func, select
-from starlette.responses import JSONResponse
-
-from app import crud
 from app.api.deps import SessionDep
 from app.models import (
-    Apartment,
-    ApartmentCreate,
-    ApartmentPublic,
-    ApartmentsPublic,
-    Message,
     Settings,
     SettingsCreate,
-    SettingsPublic
+    SettingsPublic,
 )
-from app.utils import templates
 
 router = APIRouter(prefix="/settings", tags=["settings"])
+
 
 @router.get("/", response_model=SettingsPublic)
 def read_settings(session: SessionDep, request: Request):
     settings = session.exec(select(Settings)).first()
 
     return settings
+
 
 @router.put("/", response_model=SettingsPublic)
 def update_settings(session: SessionDep, request: Request, settings_in: SettingsCreate):
@@ -45,4 +35,3 @@ def update_settings(session: SessionDep, request: Request, settings_in: Settings
     session.refresh(settings)
 
     return settings
-
