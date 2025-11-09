@@ -20,6 +20,30 @@
               files = "^backend/";
               pass_filenames = false;
             };
+            bun-check = {
+              enable = true;
+              entry = "bash -c 'cd frontend && bun run check'";
+              files = "^frontend/";
+              pass_filenames = false;
+            };
+            bun-lint = {
+              enable = true;
+              entry = "bash -c 'cd frontend && bun run lint'";
+              files = "^frontend/";
+              pass_filenames = false;
+            };
+            bun-format = {
+              enable = true;
+              entry = "bash -c 'cd frontend && bun run format'";
+              files = "^frontend/";
+              pass_filenames = false;
+            };
+            bun-test = {
+              enable = true;
+              entry = "bash -c 'cd frontend && bun run test'";
+              files = "^frontend/";
+              pass_filenames = false;
+            };
           };
         };
 
