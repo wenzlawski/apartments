@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import scrapy
+from scrapy.selector import Selector
 
 
 class QuotesSpider(scrapy.Spider):
@@ -19,3 +20,4 @@ class QuotesSpider(scrapy.Spider):
         filename = f"quotes-{page}.html"
         Path(filename).write_bytes(response.body)
         self.log(f"Saved file {filename}")
+        return Selector(response)

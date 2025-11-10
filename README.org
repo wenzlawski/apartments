@@ -1,0 +1,4 @@
+Todos:
+- Set up a compose for the entire project (back and frontend)
+- Make a dockerfile for the projects
+- add tests for the scrapy project
