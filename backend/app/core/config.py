@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = ""
     API_V1_STR: str = "/api/v1"
     ACTIVATE_SCHEDULER: bool = False
+    KLEINANZEIGEN_USERNAME: str
+    KLEINANZEIGEN_PASSWORD: str
 
     PROJECT_NAME: str
 

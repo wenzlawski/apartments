@@ -9,8 +9,7 @@ class QuotesSpider(scrapy.Spider):
 
     async def start(self):
         urls = [
-            "https://quotes.toscrape.com/page/1/",
-            "https://quotes.toscrape.com/page/2/",
+            "https://www.kleinanzeigen.de/s-suchanfrage.html?keywords=&categoryId=196&locationStr=Berlin&locationId=3331&radius=0&sortingField=SORTING_DATE&adType=&posterType=&pageNum=1&action=find&maxPrice=&minPrice=&buyNowEnabled=false&shippingCarrier="
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)

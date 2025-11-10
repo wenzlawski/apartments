@@ -5,9 +5,24 @@ from sqlmodel import Field, SQLModel
 
 # Shared properties
 class ApartmentBase(SQLModel):
-    title: str = Field(min_length=1, max_length=255)
-    description: str | None = Field(default=None, max_length=255)
+    title: str = Field(min_length=1, max_length=512)
+    description: str | None = Field(default=None)
     rating: int | None = None
+    # num_rooms: int
+    # address: str = Field(min_length=1, max_length=512)
+    # posted_at: datetime
+    # area_sqm: float
+    # construction_year: int
+    # num_bathrooms: int
+    # floor: int
+    # maintenance_fee: float
+    # has_commission: bool
+    # posting_id: int
+    # seller_object_id: str
+    # price: float
+    # TODO: Energy, available from, zustand, bodenbelag,
+    # TODO: Computed field: ppm2 (area / price), coordinates (address), near amenities, obj properties (from pictures/description)
+    # Should make all the computed things a json object
 
 
 # Properties to receive on item creation
