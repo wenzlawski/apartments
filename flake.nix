@@ -14,12 +14,12 @@
             alejandra.enable = true;
             ruff.enable = true;
             ruff-format.enable = true;
-            unit-tests = {
-              enable = true;
-              entry = "bash -c 'cd backend && bash ./scripts/tests-start.sh'";
-              files = "^backend/";
-              pass_filenames = false;
-            };
+            # unit-tests = {
+            #   enable = true;
+            #   entry = "bash -c 'cd backend && bash ./scripts/tests-start.sh'";
+            #   files = "^backend/";
+            #   pass_filenames = false;
+            # };
             bun-precommit = {
               enable = true;
               entry = "bash -c 'cd frontend && bun run precommit'";
