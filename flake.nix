@@ -55,7 +55,7 @@
           pkgs.writeShellScriptBin "pre-commit-run" script;
 
         packages.default = pkgs.stdenv.mkDerivation {
-          pname = "template";
+          pname = "apartments";
           version = "0.0.0";
           src = ./.;
 
