@@ -4,6 +4,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session, delete
 
+from app.core.config import settings
 from app.core.db import engine, init_db
 from app.main import app
 from app.models import Apartment
@@ -23,3 +24,13 @@ def db() -> Generator[Session]:
 def client() -> Generator[TestClient]:
     with TestClient(app) as c:
         yield c
+
+
+@pytest.fixture(scope="session", autouse=True)
+def faker_session_locale():
+    return [settings.FAKER_LOCALE]
+
+
+@pytest.fixture(scope="session", autouse=True)
+def faker_seed():
+    return settings.FAKER_TEST_RANDOM_SEED

@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from fastapi import APIRouter, Request, Response
@@ -14,6 +15,8 @@ from app.models import (
     ApartmentUpdate,
     Message,
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/apartments", tags=["apartments"])
 

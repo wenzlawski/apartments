@@ -10,8 +10,6 @@ from app.core.config import settings
 from app.models import ApartmentCreate
 
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
-f = Faker("de_DE")
-f.seed_instance(settings.FAKER_RANDOM_SEED)
 
 
 def setup_logging() -> None:
@@ -33,13 +31,13 @@ class DecimalEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-def generate_random_apartment() -> ApartmentCreate:
+def generate_random_apartment(f: Faker) -> ApartmentCreate:
     return ApartmentCreate(
         description=f.text(max_nb_chars=100),
         rating=f.random_int(1, 5),
         num_rooms=f.random_int(1, 3),
         address=f.address(),
-        posted_at=f.date_this_year(),
+        posted_at=f.date_time_this_year(),
         area_sqm=f.pyfloat(max_value=150, min_value=50, positive=True, right_digits=1),
         construction_year=f.random_int(1850, 2000),
         num_bathrooms=f.random_int(1, 3),
@@ -53,4 +51,7 @@ def generate_random_apartment() -> ApartmentCreate:
         price=f.pyfloat(
             max_value=1_000_000, min_value=100_000, positive=True, right_digits=2
         ),
+        scraped_html=f.text(),
+        scraped_at=f.date_time_this_year(),
+        url=f.uri(["http", "https"]),
     )

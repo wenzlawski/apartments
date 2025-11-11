@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from decimal import Decimal
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Column, Field, SQLModel, Text
 
 from app.models.utils import partial_model
 
@@ -23,6 +23,9 @@ class ApartmentBase(SQLModel):
     posting_id: int
     seller_object_id: str
     price: Decimal = Field(max_digits=10, decimal_places=2)
+    scraped_html: str = Field(sa_column=Column(Text))
+    scraped_at: datetime
+    url: str = Field(min_length=1, max_length=2048)
     # TODO: Energy, available from, zustand, bodenbelag,
     # TODO: Computed field: ppm2 (area / price), coordinates (address), near amenities, obj properties (from pictures/description)
     # Should make all the computed things a json object
