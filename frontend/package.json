@@ -42,5 +42,10 @@
 		"vite": "^7.2.2",
 		"vitest": "^4.0.8",
 		"vitest-browser-svelte": "^2.0.1"
+	},
+	"dependencies": {
+		"@emotion/css": "^11.13.5",
+		"dayjs": "^1.11.19",
+		"gridjs": "^6.2.0"
 	}
 }
