@@ -1,31 +1,20 @@
 import logging
 
-from faker import Faker
 from sqlmodel import Session
 
 from app.core.db import engine, init_db
 from app.models import Apartment
+from app.utils import generate_random_apartment
 
 logger = logging.getLogger(__name__)
-fake = Faker()
 
 
 def create_fake_apartments(session: Session, n=10):
-    fake = Faker()
     for _ in range(n):
-        apt = Apartment(
-            title=fake.address()[:255],
-            description=fake.text(max_nb_chars=100),
-            rating=fake.random_int(1, 5),
-        )
+        apt = Apartment.model_validate(generate_random_apartment())
         session.add(apt)
     session.commit()
     session.close()
-
-
-"""
-Add fake data to the database
-"""
 
 
 def fake_init_db(session: Session) -> None:

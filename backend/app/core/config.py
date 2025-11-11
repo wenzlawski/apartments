@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     ACTIVATE_SCHEDULER: bool = False
     KLEINANZEIGEN_USERNAME: str
     KLEINANZEIGEN_PASSWORD: str
+    FAKER_RANDOM_SEED: int = 0
 
     PROJECT_NAME: str
 

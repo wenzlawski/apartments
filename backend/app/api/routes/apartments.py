@@ -45,7 +45,8 @@ def create_apartment(
 
 
 @router.put("/{id}", response_model=ApartmentPublic)
-def update_apartment(
+@router.patch("/{id}", response_model=ApartmentPublic)
+def put_apartment(
     id: uuid.UUID,
     session: SessionDep,
     apartment_in: ApartmentUpdate,
@@ -54,9 +55,9 @@ def update_apartment(
     if not apartment:
         raise HTTPException(status_code=404, detail="Apartment not found")
 
-    update_data = apartment_in.model_dump(exclude_unset=True)
-    for key, value in update_data.items():
-        setattr(apartment, key, value)
+    update_dict = apartment_in.model_dump(exclude_unset=True)
+    apartment.sqlmodel_update(update_dict)
+
     session.add(apartment)
     session.commit()
     session.refresh(apartment)
