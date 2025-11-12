@@ -1,8 +1,6 @@
 import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
-import { json } from 'stream/consumers';
 
-import { type RequestHandler, error } from '@sveltejs/kit';
-import { type Actions, fail, redirect } from '@sveltejs/kit';
+import { type Actions, error, fail, redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 

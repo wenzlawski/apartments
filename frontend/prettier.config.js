@@ -4,10 +4,7 @@ const config = {
 	singleQuote: true,
 	trailingComma: 'none',
 	printWidth: 100,
-	importOrder: ['^@core/(.*)$', '^@server/(.*)$', '^@ui/(.*)$', '^@(.*)$', '^[./]'],
-	importOrderSeparation: true,
-	importOrderSortSpecifiers: true,
-	plugins: ['prettier-plugin-svelte', '@trivago/prettier-plugin-sort-imports'],
+	plugins: ['prettier-plugin-svelte', 'prettier-plugin-organize-imports'],
 	overrides: [
 		{
 			files: '*.svelte',

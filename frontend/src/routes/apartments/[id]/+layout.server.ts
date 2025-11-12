@@ -1,11 +1,8 @@
 import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
-import { json } from 'stream/consumers';
 
-import { type Actions, type RequestHandler, error, fail, redirect } from '@sveltejs/kit';
+import { type LoadEvent, error } from '@sveltejs/kit';
 
-import type { PageServerLoad } from './$types';
-
-export const load: PageServerLoad = async ({ params, fetch }) => {
+export const load = async ({ params, fetch }: LoadEvent) => {
 	const res = await fetch(`${PUBLIC_BACKEND_API_URL}/apartments/${params.id}`);
 
 	if (res.status === 422) {
