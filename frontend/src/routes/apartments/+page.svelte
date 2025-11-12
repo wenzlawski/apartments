@@ -62,6 +62,7 @@
 </script>
 
 <h1 class="text-2xl">Apartments</h1>
+<a href="/apartments/new" class="btn btn-primary">New</a>
 
 {#if data.data && data.count > 0}
 	<div id="wrapper"></div>
