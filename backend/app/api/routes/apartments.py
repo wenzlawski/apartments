@@ -1,9 +1,9 @@
 import logging
 import uuid
 
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Query, Request, Response
 from fastapi.exceptions import HTTPException
-from sqlmodel import select
+from sqlmodel import func, select
 
 from app import crud
 from app.api.deps import SessionDep
@@ -23,11 +23,17 @@ router = APIRouter(prefix="/apartments", tags=["apartments"])
 
 # Dummy datastore
 @router.get("/", response_model=ApartmentsPublic)
-def read_items(session: SessionDep, request: Request):
-    statement = select(Apartment)
+def read_items(
+    session: SessionDep,
+    request: Request,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=100),
+):
+    statement = select(Apartment).offset(skip).limit(limit)
     items = session.exec(statement).all()
+    total = session.exec(select(func.count()).select_from(Apartment)).one()
 
-    return ApartmentsPublic(data=items, count=len(items))
+    return ApartmentsPublic(data=items, count=total)
 
 
 @router.get("/{id}", response_model=ApartmentPublic)
