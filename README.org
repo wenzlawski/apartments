@@ -1,4 +1,23 @@
 Todos:
 - Set up a compose for the entire project (back and frontend)
 - Make a dockerfile for the projects
-- add tests for the scrapy project
+- [X] add tests for the scrapy project
+- Scraper: kleinanzeigen, saving to db
+
+
+Frontend:
+- Settings page
+- Create new: manually, import (request scraper)
+- Filter
+- Button to run scraper (open websocket and make a spinner)
+- top right notification space
+- 
+
+Features:
+- Amenity proximity
+- Location score
+- ANN, MLP, CNN, XGBoost, DNN for price forecasting
+- automatic contact (if email provided, or over kleinanzeigen), initial message generation
+  if contact over phone, display "script" of infos that are necessary to obtain
+- add Documents to the apartment (web site, expose, images) -> ceph, minio, garage
+- LLM data extraction/structuring
