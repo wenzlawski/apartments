@@ -1,20 +1,17 @@
-// import { $ } from "bun"
-import type { SpawnOptions } from 'bun';
+import type { SpawnOptionsWithoutStdio } from 'child_process';
+import { spawn } from 'child_process';
 
-const spawnOptions: SpawnOptions.OptionsObject = {
-	stdin: 'inherit',
-	stdout: 'inherit',
-	stderr: 'inherit'
+const spawnOptions: SpawnOptionsWithoutStdio = {
+	stdio: 'inherit'
 };
 
 const run = async () => {
-	Bun.spawn(['bun', 'run', 'format'], spawnOptions);
-	Bun.spawn(['bun', 'run', 'lint'], spawnOptions);
+	spawn('npm', ['run', 'format'], spawnOptions);
+	spawn('npm', ['run', 'lint'], spawnOptions);
 
 	// process.on('SIGINT', async () => {
 	// 	console.log('Cleaning up...');
-	// 	// Bun.spawn(["bun", "run", "db:down"])
-	// 	// await $`bun run db:down` will also work
+	// 	// spawn('npm', ['run', 'db:down'], spawnOptions);
 	// });
 };
 
