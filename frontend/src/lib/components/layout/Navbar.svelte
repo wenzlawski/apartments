@@ -32,8 +32,10 @@
 	</div>
 
 	<div class="navbar-center hidden md:flex">
-		<ul class="menu menu-horizontal px-1 text-lg">
+		<ul class="menu menu-horizontal text-lg">
 			<slot />
 		</ul>
 	</div>
+
+	<div class="navbar-end"></div>
 </div>

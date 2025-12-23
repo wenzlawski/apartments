@@ -2,8 +2,6 @@ import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 
 export async function load() {
-	console.log(`Public api: ${PUBLIC_BACKEND_API_URL}`);
-
 	const res = await fetch(`${PUBLIC_BACKEND_API_URL}/apartments/`);
 
 	if (!res.ok) {
