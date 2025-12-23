@@ -1,0 +1,7 @@
+keys:
+  - &mw age1pd03awq8rz2mmn8gzdfytz06jvalpxl36q9shdr2a4fk9zswygss8d4mw9
+creation_rules:
+  - path_regex: .env.enc
+    key_groups:
+      - age:
+          - *mw
