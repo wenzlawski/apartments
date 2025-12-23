@@ -11,7 +11,7 @@
         pre-commit-check = inputs.git-hooks.lib.${system}.run {
           src = ./.;
           hooks = {
-            alejandra.enable = true;
+            # alejandra.enable = true;
             ruff.enable = true;
             ruff-format.enable = true;
             # unit-tests = {
@@ -20,9 +20,15 @@
             #   files = "^backend/";
             #   pass_filenames = false;
             # };
+            alejandra' = {
+              enable = true;
+              entry = "${pkgs.alejandra}/bin/alejandra -q .";
+              files = "flake.nix";
+              pass_filenames = false;
+            };
             bun-precommit = {
               enable = true;
-              entry = "bash -c 'cd frontend && pnpm run precommit'";
+              entry = "bash -c 'cd frontend && ${pkgs.pnpm}/bin/pnpm run precommit'";
               files = "^frontend/";
               pass_filenames = false;
             };
@@ -34,7 +40,9 @@
           python3
           djlint
           ruff
-          bun
+          pnpm
+          nodejs_20
+          sops
         ];
 
         buildInputs = with pkgs; [];
