@@ -1,0 +1,50 @@
+services:
+  backend:
+    restart: "no"
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=local
+    command:
+      - fastapi
+      - run
+      - --reload
+      - "app/main.py"
+    develop:
+      watch:
+        - path: ./backend
+          action: sync
+          target: /app
+          ignore:
+            - ./backend/.venv
+            - .venv
+        - path: ./backend/pyproject.toml
+          action: rebuild
+
+  frontend:
+    restart: "no"
+    build:
+      context: ./frontend
+      args:
+        - PUBLIC_BACKEND_API_URL=http://localhost:8000
+        - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    # command:
+    #   - pnpm
+    #   - run
+    #   - dev
+
+  adminer:
+    restart: "no"
+    ports:
+      - "8081:8080"
+
+  db:
+    restart: "no"
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - .docker-compose/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d

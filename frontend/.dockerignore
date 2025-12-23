@@ -1,0 +1,15 @@
+Dockerfile
+.dockerignore
+.gitignore
+README.md
+.prettier.config.ts
+.prettierignore
+precommit.ts
+.npmrc
+node_modules
+dist
+.svelte-kit
+.vscode
+build
+backage
+**/.env
