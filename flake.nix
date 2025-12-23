@@ -22,7 +22,7 @@
             # };
             bun-precommit = {
               enable = true;
-              entry = "bash -c 'cd frontend && bun run precommit'";
+              entry = "bash -c 'cd frontend && pnpm run precommit'";
               files = "^frontend/";
               pass_filenames = false;
             };
