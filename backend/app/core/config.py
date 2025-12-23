@@ -4,6 +4,7 @@ from typing import Annotated, Any, Literal
 from pydantic import (
     AnyUrl,
     BeforeValidator,
+    Field,
     PostgresDsn,
     computed_field,
     field_validator,
@@ -27,12 +28,12 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = ""
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
     API_V1_STR: str = "/api/v1"
     ACTIVATE_SCHEDULER: bool = False
-    KLEINANZEIGEN_USERNAME: str
-    KLEINANZEIGEN_PASSWORD: str
+    KLEINANZEIGEN_USERNAME: str | None = Field(default=None)
+    KLEINANZEIGEN_PASSWORD: str | None = Field(default=None)
     FAKER_LOCALE: str = "de_DE"
     FAKER_RANDOM_SEED: int | None = None
     FAKER_TEST_RANDOM_SEED: int = 0
