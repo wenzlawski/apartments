@@ -1,4 +1,31 @@
 services:
+  proxy:
+    image: traefik:3.0
+    volumes:
+      - ${XDG_RUNTIME_DIR}/podman/podman.sock:/run/user/1000/podman/podman.sock:ro
+    # userns_mode: "keep-id"
+    ports:
+      - "80:80"
+      - "8090:8080"
+    command:
+      - --providers.docker=true
+      - --providers.docker.constraints=Label(`traefik.constraint-label`, `traefik-public`)
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+      - --accesslog
+      - --log
+      - --log.level=DEBUG
+      - --api
+      - --api.insecure=true
+      - --providers.docker.endpoint=unix:///run/user/1000/podman/podman.sock
+    labels:
+      - traefik.enable=true
+      - traefik.constraint-label=traefik-public
+      # - traefik.http.middlewares.https-redirect.contenttype.autodetect=false
+    networks:
+      - traefik-public
+
   backend:
     restart: "no"
     build:
@@ -24,18 +51,24 @@ services:
           action: rebuild
 
   frontend:
+    image: node:20-slim
     restart: "no"
+    command: sh -c "corepack enable && pnpm install && pnpm dev --host"
     build:
       context: ./frontend
       args:
-        - PUBLIC_BACKEND_API_URL=http://localhost:8000
+        - PUBLIC_BACKEND_API_URL=http://backend:8000/api/v1
         - NODE_ENV=development
     ports:
-      - "3000:3000"
-    # command:
-    #   - pnpm
-    #   - run
-    #   - dev
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.svelte-kit
+    environment:
+      - PUBLIC_BACKEND_API_URL=http://backend:8000/api/v1
+      - NO_PROXY=localhost,127.0.0.1,backend
+    working_dir: /app
 
   adminer:
     restart: "no"
@@ -46,5 +79,7 @@ services:
     restart: "no"
     ports:
       - "5432:5432"
-    # volumes:
-    #   - .docker-compose/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+networks:
+  traefik-public:
+    external: false

@@ -10,7 +10,7 @@ services:
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d apartmentsdb -U apartmentsdb" ]
+      test: [ "CMD-SHELL", "pg_isready -d apartments -U apartments" ]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -24,6 +24,8 @@ services:
       db:
         condition: service_healthy
         restart: true
+    networks:
+      - traefik-public
     command: bash scripts/prestart.sh
     environment:
       - PROJECT_NAME=Apartments
@@ -38,8 +40,22 @@ services:
     restart: always
     depends_on:
       - db
+    networks:
+      - traefik-public
     environment:
       - ADMINER_DESIGN=pepa-linha-dark
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=apartments_traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.rule=Host(`adminer.apartments.local`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.entrypoints=http
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-http.middlewares=https-redirect
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-https.rule=Host(`adminer.apartments.local`)
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-https.entrypoints=https
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-https.tls=true
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-adminer-https.tls.certresolver=le
+      - traefik.http.services.${STACK_NAME?Variable not set}-adminer.loadbalancer.server.port=8080
 
   backend:
     image: apartments-backend:latest
@@ -52,6 +68,8 @@ services:
         condition: service_completed_successfully
     ports:
       - "8080:8080"
+    networks:
+      - traefik-public
     environment:
       - PROJECT_NAME=Apartments
       - POSTGRES_HOST=db
@@ -66,19 +84,51 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=apartments_traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=8000
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=Host(`api.apartments.local`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.entrypoints=http
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.rule=Host(`api.apartments.local`)
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.entrypoints=https
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.tls=true
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.tls.certresolver=le
+      # Enable redirection for HTTP and HTTPS
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.middlewares=https-redirect
 
   frontend:
     image: apartments-frontend:latest
     restart: always
     environment:
-      - PUBLIC_BACKEND_API_URL=${PUBLIC_BACKEND_API_URL}
+      - PUBLIC_BACKEND_API_URL=${PUBLIC_BACKEND_API_URL?Variable not seto}
+    networks:
+      - traefik-public
     build:
       context: ./frontend
       args:
         - PUBLIC_BACKEND_API_URL=https://${PUBLIC_BACKEND_API_URL?Variable not set}
         - NODE_ENV=production
-
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=apartments_traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=Host(`apartments.local`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.entrypoints=http
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-https.rule=Host(`apartments.local`)
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-https.entrypoints=https
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-https.tls=true
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-https.tls.certresolver=le
+      # Enable redirection for HTTP and HTTPS
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect
 
 
 volumes:
   app-db-data:
+    
+networks:
+  traefik-public:
+    external: true
+
