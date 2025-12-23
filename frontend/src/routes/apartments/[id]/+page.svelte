@@ -5,11 +5,11 @@
 
 	// export let data;
 	let { data, form } = $props();
-	let a = data?.apartment;
+	let a = $derived(data?.apartment);
 	// let editing = $state(true);
 	const timeFormat = 'MMMM D, YYYY, HH:mm';
-	const postedAt = a ? dayjs(a.posted_at).format(timeFormat) : '';
-	const scrapedAt = a ? dayjs(a.scraped_at).format(timeFormat) : '';
+	const postedAt = $derived(a ? dayjs(a.posted_at).format(timeFormat) : '');
+	const scrapedAt = $derived(a ? dayjs(a.scraped_at).format(timeFormat) : '');
 
 	async function deleteApartment() {
 		const res = await fetch(`/apartments/${a.id}`, { method: 'DELETE' });
