@@ -13,3 +13,4 @@ dist
 build
 backage
 **/.env
+.pnpm-store
