@@ -12,7 +12,7 @@
           src = ./.;
           hooks = {
             # alejandra.enable = true;
-            ruff.enable = true;
+            ruff.enable = false;
             ruff-format.enable = true;
             # unit-tests = {
             #   enable = true;
@@ -24,6 +24,12 @@
               enable = true;
               entry = "${pkgs.alejandra}/bin/alejandra -q .";
               files = "flake.nix";
+              pass_filenames = false;
+            };
+            ruff' = {
+              enable = true;
+              entry = "${pkgs.ruff}/bin/ruff check --fix --config=backend/pyproject.toml";
+              files = "^backend/";
               pass_filenames = false;
             };
             bun-precommit = {
