@@ -9,8 +9,8 @@
 
 BOT_NAME = "scraper"
 
-SPIDER_MODULES = ["scraper.spiders"]
-NEWSPIDER_MODULE = "scraper.spiders"
+SPIDER_MODULES = ["app.scraper.spiders"]
+NEWSPIDER_MODULE = "app.scraper.spiders"
 
 ADDONS = {}
 
@@ -58,9 +58,9 @@ DOWNLOAD_DELAY = 1
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    "scraper.pipelines.ScraperPipeline": 300,
-# }
+ITEM_PIPELINES = {
+    "app.scraper.apartment_pipeline.ApartmentPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -86,3 +86,4 @@ DOWNLOAD_DELAY = 1
 # Set settings whose default value is deprecated to a future-proof value
 FEED_EXPORT_ENCODING = "utf-8"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+LOG_LEVEL = "DEBUG"

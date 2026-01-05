@@ -9,7 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
 from app.core.config import settings
-from app.scraper.scraper.spiders.quotes_spider import QuotesSpider
+from app.scraper.spiders.quotes_spider import QuotesSpider
 from app.utils import setup_logging
 
 setup_logging()

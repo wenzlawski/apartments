@@ -1,10 +1,9 @@
 from collections.abc import Generator
 from typing import Annotated
 
+from app.core.db import engine
 from fastapi import Depends
 from sqlmodel import Session
-
-from app.core.db import engine
 
 
 def get_db() -> Generator[Session]:

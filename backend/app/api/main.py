@@ -1,7 +1,6 @@
-from fastapi import APIRouter
-
 from app.api.routes import apartments, home, private, settings, utils
 from app.core.config import settings as set
+from fastapi import APIRouter
 
 api_router = APIRouter()
 

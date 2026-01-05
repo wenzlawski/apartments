@@ -1,10 +1,6 @@
 import logging
 import uuid
 
-from fastapi import APIRouter, Query, Request, Response
-from fastapi.exceptions import HTTPException
-from sqlmodel import func, select
-
 from app import crud
 from app.api.deps import SessionDep
 from app.models import (
@@ -15,6 +11,9 @@ from app.models import (
     ApartmentUpdate,
     Message,
 )
+from fastapi import APIRouter, Query, Request, Response
+from fastapi.exceptions import HTTPException
+from sqlmodel import func, select
 
 logger = logging.getLogger(__name__)
 

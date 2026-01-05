@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Request
-from sqlmodel import select
-
 from app.api.deps import SessionDep
 from app.models import (
     Settings,
     SettingsCreate,
     SettingsPublic,
 )
+from fastapi import APIRouter, Request
+from sqlmodel import select
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 

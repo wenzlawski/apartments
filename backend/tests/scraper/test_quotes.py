@@ -2,9 +2,8 @@ import glob
 import os
 
 import pytest
+from app.scraper.spiders.quotes_spider import QuotesSpider
 from scrapy.http import HtmlResponse
-
-from app.scraper.scraper.spiders.quotes_spider import QuotesSpider
 
 base_dir = os.path.dirname(__file__)
 path = os.path.join(base_dir, "sites/quotes/")

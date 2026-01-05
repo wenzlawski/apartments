@@ -1,13 +1,12 @@
 import logging
 import uuid
 
+from app.core.config import settings
+from app.utils import generate_random_apartment
 from faker import Faker
 from fastapi.encoders import jsonable_encoder
 from fastapi.testclient import TestClient
 from sqlmodel import Session
-
-from app.core.config import settings
-from app.utils import generate_random_apartment
 from tests.utils.apartment import create_random_apartment
 
 logger = logging.getLogger(__name__)
