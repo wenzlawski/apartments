@@ -1,3 +1,5 @@
+import logging
+
 from app.api.deps import SessionDep
 from app.models import (
     Settings,
@@ -7,6 +9,8 @@ from app.models import (
 from fastapi import APIRouter, Request
 from sqlmodel import select
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/settings", tags=["settings"])
 
 
@@ -14,23 +18,24 @@ router = APIRouter(prefix="/settings", tags=["settings"])
 def read_settings(session: SessionDep, request: Request):
     settings = session.exec(select(Settings)).first()
 
+    logger.info(f"{settings=}")
+
     return settings
 
 
 @router.put("/", response_model=SettingsPublic)
-def update_settings(session: SessionDep, request: Request, settings_in: SettingsCreate):
-    settings = session.exec(select(Settings)).first()
-
-    # If it doesn't exist, create it using the new data (assuming `new_data` is a dict)
+@router.patch("/", response_model=SettingsPublic)
+def upsert_settings(session: SessionDep, request: Request, settings_in: SettingsCreate):
+    settings = session.get(Settings, 1)
     if settings is None:
-        settings = Settings.model_validate(settings_in)
-        session.add(settings)
-    else:
-        # Update fields
-        for key, value in settings_in.model_dump().items():
-            setattr(settings, key, value)
+        settings = Settings(id=1)
 
+    # copy provided fields onto the model
+    data = settings_in.model_dump(exclude_unset=True)
+    for key, value in data.items():
+        setattr(settings, key, value)
+
+    session.add(settings)
     session.commit()
     session.refresh(settings)
-
     return settings
