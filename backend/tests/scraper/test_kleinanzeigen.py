@@ -1,6 +1,11 @@
+import logging
+import types
+
 import pytest
 from app.scraper.spiders.kleinanzeigen import KleinanzeigenSpider
 from scrapy.http import HtmlResponse, Request
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
@@ -54,8 +59,12 @@ def test_parse_paginates(spider, monkeypatch):
 
     results = list(spider.parse(response))
 
+    logger.info(f"{results=}")
+
     item_requests = [r for r in results if "s-anzeige" in r.url]
     next_page = [r for r in results if "seite:2" in r.url]
+
+    logger.info(f"{next_page=}")
 
     assert len(item_requests) == 1
     assert len(next_page) == 1
@@ -72,7 +81,13 @@ def test_parse_stops_on_known(spider, monkeypatch):
 
     response = fake_response(spider.start_urls[0], html)
 
-    monkeypatch.setattr(spider, "filter_known_links", lambda links: [])
+    monkeypatch.setattr(
+        type(spider),
+        "filter_known_links",
+        types.MethodType(lambda self, links: [], spider),
+    )
+
+    # monkeypatch.setattr(spider, "filter_known_links", types.MethodType(lambda self, links: [], spider))
 
     results = list(spider.parse(response))
     assert results == []

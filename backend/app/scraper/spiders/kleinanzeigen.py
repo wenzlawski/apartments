@@ -45,11 +45,12 @@ class KleinanzeigenSpider(Spider):
             yield response.follow(self.root_url + href, self.parse_item)
 
         # Extract next page link from site instead of hardcoding
-        # next_page = response.css("a.pagination-next::attr(href)").get()
-        # if next_page:
-        #     yield response.follow(self.root_url + next_page, self.parse)
+        next_page = response.css("a.pagination-next::attr(href)").get()
+        if next_page:
+            yield response.follow(self.root_url + next_page, self.parse)
 
     def filter_known_links(self, links):
+        return []
         pairs = [
             (apt_id, href)
             for href in links
