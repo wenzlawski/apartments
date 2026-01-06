@@ -1,8 +1,10 @@
+
+
 Todos:
-- Set up a compose for the entire project (back and frontend)
-- Make a dockerfile for the projects
+- [X] Set up a compose for the entire project (back and frontend)
+- [X] Make a dockerfile for the projects
 - [X] add tests for the scrapy project
-- Scraper: kleinanzeigen, saving to db
+- [X] Scraper: kleinanzeigen, saving to db
 
 
 Frontend:
@@ -11,9 +13,9 @@ Frontend:
 - Filter
 - Button to run scraper (open websocket and make a spinner)
 - top right notification space
-- 
 
-Features:
+
+Future Features:
 - Amenity proximity
 - Location score
 - ANN, MLP, CNN, XGBoost, DNN for price forecasting
@@ -21,3 +23,79 @@ Features:
   if contact over phone, display "script" of infos that are necessary to obtain
 - add Documents to the apartment (web site, expose, images) -> ceph, minio, garage
 - LLM data extraction/structuring
+
+* Stack
+
+- docker-compose
+- sops for secrets
+- pre-commit
+- nix flakes
+
+** Backend
+
+- Python
+- FastAPI
+- Scrapy
+
+** Database
+
+- Postgres
+
+** Frontend
+
+- NodeJS
+- SvelteKit
+
+* Architecture
+** Backend
+*** API
+
+Central system. Right now mostly a simple CRUD.
+
+Scraper Service is started from here at globally configured interval (through settings.)
+
+*** Scraper
+
+Scraper service is started by the API at set intervals.
+
+When it runs it checks the scrape config from the database. When its a scrape job's turn to run it gets the config from the db and runs it with all jobs in parallel.
+
+A scrape job always has a schedule, how often its run, and a set of URLs to scrape.
+
+Scrapers are chosen based on the website and run in parallel. Each scraper is run once, with all the appropriate urls from all jobs to run.
+
+An entry for each scrape job run is created, linked with the scrape job itself. If not already present, it saves the scraped URLs to the database, linking each entry back to the scrape job run.
+
+A cleanup scraper job is also run at a configured interval. It checks all the already scraped pages for whether they are still live. If they have been taken down it logs this into the database and closes the item.
+
+**** Spiders
+
+***** Kleinanzeigen
+
+The spider for https://kleinanzeigen.de
+
+- [ ] Stop the search when the list of items from other locations is reached.
+- [ ] Filter pages that have already been crawled in that pass, not just from the db
+
+*** Database
+
+The model should be kept as generic as possible. It is probably better to abstract the Apartment table even further, allowing for a set of crucial fields and an arbitrary amount of other fields, which then are set and configured as needed.
+
+Crucial fields:
+- =id=
+- =categories=
+- =created_at=
+- =posted_at=
+- =updated_at=
+- =price=
+- =location=
+- =rating=
+
+
+**** Settings
+
+Global config for the service. Here things like the parameters for the scraper service and backend are set.
+
+**** Apartment
+
+**** ApartmentPage
