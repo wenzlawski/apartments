@@ -9,7 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
 from app.core.config import settings
-from app.scraper.spiders.quotes_spider import QuotesSpider
+from app.scraper.spiders.kleinanzeigen import KleinanzeigenSpider
 from app.utils import setup_logging
 
 setup_logging()
@@ -75,7 +75,7 @@ def run_scraper():
 
     runner = CrawlerProcess(settings)
 
-    runner.crawl(QuotesSpider)
+    runner.crawl(KleinanzeigenSpider)
     logger.info("Scraper started")
     runner.start()
     logger.info("Scraper finished")
