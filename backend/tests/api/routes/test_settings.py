@@ -54,7 +54,13 @@ def test_put_invalid_cron(client: TestClient, faker: Faker):
 
 @pytest.mark.parametrize(
     "cron",
-    ["* * * * *", "30 23 * * *", "5 23 * * *", "5,20,35 7-11 1-10 1,3 1"],
+    [
+        "* * * * *",
+        "30 23 * * *",
+        "5 23 * * *",
+        "5,20,35 7-11 1-10 1,3 1",
+        "5,20,35 7-11,13-17 1-10,20-25 1,3,5,7,9,11 1,3,5",
+    ],
 )
 def test_put_valid_crons(client: TestClient, faker: Faker, cron: str):
     data = {

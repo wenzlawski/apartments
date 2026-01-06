@@ -3,6 +3,7 @@ import multiprocessing
 from contextlib import asynccontextmanager
 
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
@@ -27,7 +28,9 @@ async def lifespan(_: FastAPI):
         logger.info("Starting BackgroundScheduler")
         scheduler = BackgroundScheduler()
         scheduler.start()
-        scheduler.add_job(build_scraper, "interval", minutes=1, id="scraper_job")
+        scheduler.add_job(
+            build_scraper, CronTrigger.from_crontab("1 * * * *"), id="scraper_job"
+        )
 
     yield
 

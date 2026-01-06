@@ -1,13 +1,9 @@
-import re
 from copy import deepcopy
 from typing import Any
 
+from apscheduler.triggers.cron import CronTrigger
 from pydantic import BaseModel, create_model
 from pydantic.fields import FieldInfo
-
-CRON_RE = re.compile(
-    r"^((((\d+,)+\d+|(\d+(\/|-|#)\d+)|\d+L?|\*(\/\d+)?|L(-\d+)?|\?|[A-Z]{3}(-[A-Z]{3})?) ?){5,7})$"
-)
 
 
 def partial_model(model: type[BaseModel]):
@@ -31,6 +27,5 @@ def partial_model(model: type[BaseModel]):
 
 
 def is_cron_string(cron):
-    if CRON_RE.fullmatch(cron):
+    if CronTrigger.from_crontab(cron):
         return cron
-    raise ValueError(f"Invalid cron expression: {cron!r}")
