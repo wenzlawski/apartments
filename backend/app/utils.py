@@ -46,12 +46,9 @@ def generate_random_apartment(f: Faker) -> ApartmentCreate:
             max_value=500, min_value=100, positive=True, right_digits=2
         ),
         has_commission=f.boolean(),
-        posting_id=f.random_int(),
+        posting_id=f.pystr(10),
         seller_object_id=f.pystr(min_chars=10, max_chars=20),
         price=f.pyfloat(
             max_value=1_000_000, min_value=100_000, positive=True, right_digits=2
         ),
-        scraped_html=f.text(),
-        scraped_at=f.date_time_this_year(),
-        url=f.uri(["http", "https"]),
     )
