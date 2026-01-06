@@ -54,6 +54,14 @@ def upgrade():
         sa.Column("id", sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
+
+    op.execute(
+        """
+        INSERT INTO settings (id, email, cron_schedule)
+        VALUES (1, NULL, NULL)
+        """
+    )
+
     # ### end Alembic commands ###
 
 

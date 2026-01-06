@@ -35,7 +35,12 @@ target_metadata = SQLModel.metadata
 # ... etc.
 
 
-def get_url():
+def get_url() -> str:
+    # Prefer URL given by Alembic config (can be overridden in tests).
+    url = config.get_main_option("sqlalchemy.url")
+    if url:
+        return url
+    # Fallback: dynamic from your .env via settings
     return str(settings.SQLALCHEMY_DATABASE_URI)
 
 
