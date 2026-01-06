@@ -9,8 +9,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - appnet
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d apartments -U apartments" ]
+      test: ["CMD-SHELL", "pg_isready -d apartments -U apartments"]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -26,6 +28,7 @@ services:
         restart: true
     networks:
       - traefik-public
+      - appnet
     command: bash scripts/prestart.sh
     environment:
       - PROJECT_NAME=Apartments
@@ -70,6 +73,7 @@ services:
       - "8080:8080"
     networks:
       - traefik-public
+      - appnet
     environment:
       - PROJECT_NAME=Apartments
       - POSTGRES_HOST=db
@@ -80,7 +84,13 @@ services:
       - KLEINANZEIGEN_PASSWORD=${KLEINANZEIGEN_PASSWORD?Variable not set}
       - ENVIRONMENT=production
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/" ]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8000/api/v1/utils/health-check/",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -124,11 +134,10 @@ services:
       # Enable redirection for HTTP and HTTPS
       # - traefik.http.routers.${PROJECT_NAME?Variable not set}-frontend-http.middlewares=https-redirect
 
-
 volumes:
   app-db-data:
-    
+
 networks:
+  appnet:
   traefik-public:
     external: true
-
