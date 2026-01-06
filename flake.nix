@@ -49,6 +49,7 @@
           pnpm
           nodejs_20
           sops
+          just
         ];
 
         buildInputs = with pkgs; [];
