@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import Annotated, Any, Literal
 
 from pydantic import (
@@ -11,6 +12,13 @@ from pydantic import (
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+BASE_DIR = Path(__file__).resolve().parents[2]  # this is `backend/`
+ROOT_DIR = BASE_DIR.parent  # this is project root
+
+logger = logging.getLogger(__name__)
+
+logger.info(f"{ROOT_DIR=}")
+
 
 def parse_cors(v: Any) -> list[str] | str:
     if isinstance(v, str) and not v.startswith("["):
@@ -22,7 +30,7 @@ def parse_cors(v: Any) -> list[str] | str:
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env", env_ignore_empty=True, extra="ignore"
+        env_file=ROOT_DIR / ".env", env_ignore_empty=True, extra="ignore"
     )
 
     POSTGRES_HOST: str
@@ -30,6 +38,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
+    POSTGRES_TEST_DB: str | None = None
     API_V1_STR: str = "/api/v1"
     ACTIVATE_SCHEDULER: bool = False
     KLEINANZEIGEN_USERNAME: str | None = Field(default=None)
@@ -39,6 +48,11 @@ class Settings(BaseSettings):
     FAKER_TEST_RANDOM_SEED: int = 0
 
     PROJECT_NAME: str
+
+    @computed_field
+    @property
+    def POSTGRES_TEST_DB_effective(self) -> str:
+        return self.POSTGRES_TEST_DB or f"{self.POSTGRES_DB}_test"
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -50,6 +64,18 @@ class Settings(BaseSettings):
             host=self.POSTGRES_HOST,
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
+        )
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def SQLALCHEMY_TEST_DATABASE_URI(self) -> PostgresDsn:
+        return PostgresDsn.build(
+            scheme="postgresql+psycopg",
+            username=self.POSTGRES_USER,
+            password=self.POSTGRES_PASSWORD,
+            host=self.POSTGRES_HOST,
+            port=self.POSTGRES_PORT,
+            path=self.POSTGRES_TEST_DB_effective,
         )
 
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
