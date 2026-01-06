@@ -1,2 +1,5 @@
-dbup *ARGS:
-    podman compose up {{ARGS}}
+# Default: run all tests
+default: t
+
+t args='tests':
+    uv run coverage run -m pytest {{args}}
