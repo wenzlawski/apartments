@@ -1,5 +1,11 @@
 # Default: run all tests
 default: t
 
+r args='':
+    uv run uvicorn app.main:app {{args}}
+
 t args='tests':
     uv run coverage run -m pytest {{args}}
+
+cli args='':
+    uv run python -m app.cli {{args}}
