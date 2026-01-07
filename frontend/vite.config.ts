@@ -7,6 +7,11 @@ import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
+	server: {
+		watch: {
+			ignored: ['**./.pnpm-store/**', '**/node_modules/**', '**/node_modules/.pnpm/**']
+		}
+	},
 	test: {
 		testTimeout: 2500,
 		hookTimeout: 2500,
