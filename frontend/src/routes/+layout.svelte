@@ -17,4 +17,6 @@
 	<NavbarItem href="/settings">Settings</NavbarItem>
 </Navbar>
 
-{@render children()}
+<div class="max-w-4xl mx-auto px-4 mt-4">
+	{@render children()}
+</div>

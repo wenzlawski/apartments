@@ -61,8 +61,10 @@
 	});
 </script>
 
-<h1 class="text-2xl">Apartments</h1>
-<a href="/apartments/new" class="btn btn-primary">New</a>
+<div class="flex mb-2 gap-x-2">
+	<h1 class="text-xl">Apartments</h1>
+	<a href="/apartments/new" class="btn btn-primary">New</a>
+</div>
 
 {#if data.data && data.count > 0}
 	<div id="wrapper"></div>
