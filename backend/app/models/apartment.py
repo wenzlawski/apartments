@@ -11,7 +11,7 @@ from app.models.utils import partial_model
 class ApartmentBase(SQLModel):
     description: str | None = Field(default=None)
     rating: int | None = None
-    num_rooms: Decimal = Field(default=None, sa_column=Column(Numeric(2, 1)))
+    num_rooms: Decimal | None = Field(default=None, sa_column=Column(Numeric(2, 1)))
     address: str | None = Field(default=None, sa_column=Column(Text))
     posted_at: datetime | None = None
     area_sqm: Decimal | None = Field(default=None, sa_column=Column(Numeric(6, 1)))
