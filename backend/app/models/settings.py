@@ -31,4 +31,4 @@ class Settings(SettingsBase, table=True):
 
 # Properties to return via API, id is always required
 class SettingsPublic(SettingsBase):
-    id: int
+    pass

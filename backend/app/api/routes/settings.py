@@ -1,11 +1,7 @@
 import logging
 
 from app.api.deps import SessionDep
-from app.models import (
-    Settings,
-    SettingsCreate,
-    SettingsPublic,
-)
+from app.models import Settings, SettingsPublic, SettingsUpdate
 from fastapi import APIRouter, Request
 from sqlmodel import select
 
@@ -18,15 +14,16 @@ router = APIRouter(prefix="/settings", tags=["settings"])
 def read_settings(session: SessionDep, request: Request):
     settings = session.exec(select(Settings)).first()
 
-    logger.info(f"{settings=}")
-
     return settings
 
 
 @router.put("/", response_model=SettingsPublic)
 @router.patch("/", response_model=SettingsPublic)
-def upsert_settings(session: SessionDep, request: Request, settings_in: SettingsCreate):
+def upsert_settings(session: SessionDep, request: Request, settings_in: SettingsUpdate):
+    logger.info(f"{settings_in=}")
+
     settings = session.get(Settings, 1)
+
     if settings is None:
         settings = Settings(id=1)
 
