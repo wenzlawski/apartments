@@ -26,6 +26,10 @@ def partial_model(model: type[BaseModel]):
     )
 
 
-def is_cron_string(cron):
-    if CronTrigger.from_crontab(cron):
-        return cron
+def is_cron_string(cron: str) -> str:
+    CronTrigger.from_crontab(cron)
+    return cron
+
+
+def strip_str(s: str):
+    return s.strip()

@@ -11,7 +11,7 @@ from app.utils import generate_random_apartment
 logger = logging.getLogger(__name__)
 
 
-def create_fake_apartments(session: Session, n=10):
+def create_fake_apartments(session: Session, n: int = 10):
     f = Faker(settings.FAKER_LOCALE)
 
     if settings.FAKER_RANDOM_SEED is not None:

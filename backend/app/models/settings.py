@@ -3,15 +3,15 @@ from typing import Annotated
 from pydantic import AfterValidator, EmailStr
 from sqlmodel import Field, SQLModel
 
-from app.models.utils import is_cron_string
+from app.models.utils import is_cron_string, strip_str
 
 
 # Shared properties
 class SettingsBase(SQLModel):
     email: EmailStr | None = Field(default=None, min_length=1, max_length=255)
-    cron_schedule: Annotated[str, AfterValidator(is_cron_string)] | None = Field(
-        default=None, max_length=255
-    )
+    cron_schedule: (
+        Annotated[str, AfterValidator(is_cron_string), AfterValidator(strip_str)] | None
+    ) = Field(default=None, max_length=255)
 
 
 # Properties to receive on item creation
