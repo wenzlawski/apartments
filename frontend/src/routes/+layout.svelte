@@ -13,6 +13,7 @@
 </svelte:head>
 
 <Navbar>
+	<NavbarItem href="/">Home</NavbarItem>
 	<NavbarItem href="/apartments">Apartments</NavbarItem>
 	<NavbarItem href="/settings">Settings</NavbarItem>
 </Navbar>
