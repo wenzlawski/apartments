@@ -1,11 +1,12 @@
 <!-- src/routes/posts/+page.svelte -->
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Grid, Row, html } from 'gridjs';
+	import { Grid, html } from 'gridjs';
 	import 'gridjs/dist/theme/mermaid.css';
 	import { onMount } from 'svelte';
 
 	import { css } from '@emotion/css';
+	import { resolve } from '$app/paths';
 
 	export let data;
 	let grid;
@@ -54,7 +55,7 @@
 			// const itemId = args.
 			if (row) {
 				console.log(JSON.stringify(row.cells[0].data));
-				goto(`/apartments/${row.cells[0].data}`);
+				goto(resolve(`/apartments/${row.cells[0].data}`));
 			}
 		});
 		grid.render(document.getElementById('wrapper')!);
@@ -63,7 +64,7 @@
 
 <div class="flex mb-2 gap-x-2">
 	<h1 class="text-xl">Apartments</h1>
-	<a href="/apartments/new" class="btn btn-primary">New</a>
+	<a href={resolve('/apartments/new')} class="btn btn-primary">New</a>
 </div>
 
 {#if data.data && data.count > 0}
