@@ -63,8 +63,8 @@ ignore = [
   "E741"
 ]
 
-
-
+[tool.pyright]
+reportUnusedCallResult = false
 
 [tool.coverage.run]
 source = ["app"]
@@ -76,5 +76,3 @@ sort = "-Cover"
 
 [tool.coverage.html]
 show_contexts = true
-
-
