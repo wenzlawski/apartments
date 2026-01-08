@@ -1,24 +1,36 @@
-<script>
-	import { enhance } from '$app/forms';
+<script lang="ts">
+	import { applyAction, enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
+	import type { PageProps } from './$types';
 
-	let { data, form } = $props();
+	const { data, form }: PageProps = $props();
+
+	let values = $derived({
+		...data.data,
+		...(form?.values ?? {})
+	});
 </script>
 
 <h1 class="text-xl">Settings</h1>
 
-<form method="POST" action="?/update" use:enhance>
+<form
+	method="POST"
+	action="?/update"
+	use:enhance={() => {
+		return async ({ update }) => {
+			update({ reset: false });
+		};
+	}}
+>
 	<fieldset class="fieldset">
 		<legend class="fieldset-legend">Email</legend>
 		<input
 			type="email"
 			name="email"
 			class="input validator"
-			value={form?.values?.email ?? data.email ?? ''}
+			value={values.email}
 			aria-invalid={form?.errors?.email ? 'true' : 'false'}
 		/>
-		{#if form?.errors?.email}
-			<p class="text-error">{form.errors.email}</p>
-		{/if}
 	</fieldset>
 
 	<fieldset class="fieldset">
@@ -27,7 +39,7 @@
 			type="text"
 			name="cron_schedule"
 			class="input"
-			value={form?.values?.cron_schedule ?? data.cron_schedule ?? ''}
+			value={values.cron_schedule}
 			aria-invalid={form?.errors?.cron_schedule ? 'true' : 'false'}
 		/>
 		{#if form?.errors?.cron_schedule}
@@ -43,6 +55,6 @@
 
 	<div class="flex flex-wrap mt-2 gap-x-2">
 		<button type="submit" class="btn btn-primary">Save</button>
-		<a href="/settings/" class="btn btn-secondary">Cancel</a>
+		<a href={resolve('/settings/')} class="btn btn-secondary">Cancel</a>
 	</div>
 </form>

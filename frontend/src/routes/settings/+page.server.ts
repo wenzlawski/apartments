@@ -1,22 +1,21 @@
 import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import { fail, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export async function load() {
+export const load: PageServerLoad = async () => {
 	const res = await fetch(`${PUBLIC_BACKEND_API_URL}/settings/`);
 
-	if (!res.ok) {
-		throw new Error('Failed to fetch apartments');
-	}
+	if (!res.ok) throw new Error('Failed to fetch settings');
 
-	const apartments = await res.json();
+	const settings = await res.json();
 
-	console.log(apartments);
-
-	return apartments; // of form {data: [...], count: n}
-}
+	return {
+		data: settings
+	};
+};
 
 export const actions: Actions = {
-	update: async ({ request, params, fetch }) => {
+	update: async ({ request, fetch }) => {
 		const formData = await request.formData();
 		const raw = Object.fromEntries(formData);
 
@@ -24,7 +23,6 @@ export const actions: Actions = {
 		const data = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, v === '' ? null : v]));
 
 		console.log(`Updating settings`);
-		console.log(data);
 
 		const res = await fetch(`${PUBLIC_BACKEND_API_URL}/settings/`, {
 			method: 'PATCH',
@@ -67,6 +65,10 @@ export const actions: Actions = {
 
 		console.log('Update complete');
 
-		return { success: true }; // or { success: 'Settings updated.' }
+		const apiData = await res.json();
+
+		console.log(apiData);
+
+		return { success: true, values: apiData }; // or { success: 'Settings updated.' }
 	}
 };
