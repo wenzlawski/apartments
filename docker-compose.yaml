@@ -60,6 +60,15 @@ services:
       # - traefik.http.routers.${PROJECT_NAME?Variable not set}-adminer-https.tls.certresolver=le
       - traefik.http.services.${PROJECT_NAME?Variable not set}-adminer.loadbalancer.server.port=8080
 
+  grafana:
+    image: grafana/grafana-enterprise
+    restart: always
+    networks:
+      - appnet
+      - traefik-public
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
   backend:
     image: apartments-backend:latest
     restart: always
@@ -136,6 +145,7 @@ services:
 
 volumes:
   app-db-data:
+  grafana-storage: {}
 
 networks:
   appnet:

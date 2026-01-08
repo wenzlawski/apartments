@@ -75,6 +75,11 @@ services:
     ports:
       - "8081:8080"
 
+  grafana:
+    restart: "no"
+    ports:
+      - "3000:3000"
+
   db:
     restart: "no"
     ports:
